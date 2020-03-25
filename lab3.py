@@ -1,6 +1,8 @@
 import numpy as np
 from math import *
 from prettytable import PrettyTable
+import scipy.stats
+
 
 # Variant №208
 
@@ -184,9 +186,9 @@ print("-------------------")
 
 print("\nКритерій Стьюдента\n")
 
-
+p = 0.95
 f3 = f1 * f2
-t_tab = 2.306
+t_tab = scipy.stats.t.ppf((1 + p) / 2, f3)
 print("t0:", "%.3f " % t0, "\nt1:", "%.3f" % t1, "\nt2:", "%.3f" % t2, "\nt3:", "%.3f\n" % t3)
 if t0 < t_tab:
     b0 = 0
@@ -220,12 +222,10 @@ print("Критерій Фішера")
 d = 2
 f4 = N - d
 
-fisher_list = [5.3, 4.5, 4.1, 3.8]
-
 
 S2_ad = (m / (N - d)) * ((y1_cov - y1_av) ** 2 + (y2_cov - y2_av) ** 2 + (y3_cov - y3_av) ** 2 + (y4_cov - y4_av) ** 2)
 Fp = S2_ad / S2b
-Ft = fisher_list[f4 - 1]
+Ft = scipy.stats.f.ppf(p, f4, f3)
 print("\nFt =", Ft)
 print("Fp = %.2f" % Fp)
 if Fp > Ft:
@@ -234,3 +234,4 @@ if Fp > Ft:
 else:
     print("Fp < Ft")
     print("Рівняння регресії адекватно оригіналу при рівні значимості 0,05")
+
